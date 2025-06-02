@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo de Orientação para Instaladores Fotovoltaicos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Jogo de Orientação: Instalação de Painéis Fotovoltaicos</h1>
+        <div id="game"></div>
+        <div class="score" id="score"></div>
+        <button id="nextButton" onclick="nextQuestion()" style="display:none;">Próxima Pergunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Qual é o primeiro passo antes de iniciar a instalação elétrica?",
+                options: [
+                    "Verificar se o local está energizado",
+                    "Conferir o clima do dia",
+                    "Descarregar as ferramentas",
+                    "Fazer o aterramento"
+                ],
+                answer: 0
+            },
+            {
+                question: "Por que é importante o uso de EPIs (Equipamentos de Proteção Individual)?",
+                options: [
+                    "Para melhorar a produtividade",
+                    "Para garantir a segurança do instalador",
+                    "Para agradar o cliente",
+                    "Para seguir o cronograma"
+                ],
+                answer: 1
+            },
+            {
+                question: "Qual é a inclinação recomendada para painéis no Brasil (em média)?",
+                options: [
+                    "90 graus",
+                    "0 graus",
+                    "Entre 20 e 30 graus",
+                    "45 graus"
+                ],
+                answer: 2
+            },
+            {
+                question: "Qual é a principal função do inversor fotovoltaico?",
+                options: [
+                    "Converter corrente contínua em corrente alternada",
+                    "Armazenar energia em baterias",
+                    "Aumentar a potência dos painéis",
+                    "Proteger o sistema contra surtos elétricos"
+                ],
+                answer: 0
+            },
+            {
+                question: "O que deve ser verificado antes de subir no telhado para instalação?",
+                options: [
+                    "O alinhamento das telhas",
+                    "A estrutura de fixação e condições de segurança",
+                    "A posição do sol",
+                    "A marca dos painéis"
+                ],
+                answer: 1
+            },
+            {
+                question: "Qual é o documento que garante a conformidade com normas técnicas de instalação?",
+                options: [
+                    "Nota fiscal",
+                    "Memorial descritivo",
+                    "ART (Anotação de Responsabilidade Técnica)",
+                    "Laudo fotográfico"
+                ],
+                answer: 2
+            },
+            {
+                question: "Qual é o principal risco elétrico em sistemas fotovoltaicos?",
+                options: [
+                    "Curto-circuito entre painéis",
+                    "Descarga atmosférica",
+                    "Contato com corrente contínua",
+                    "Falha no inversor"
+                ],
+                answer: 2
+            },
+            {
+                question: "Por que é importante a manutenção periódica dos painéis fotovoltaicos?",
+                options: [
+                    "Para manter a estética do telhado",
+                    "Para aumentar a durabilidade e eficiência do sistema",
+                    "Para evitar sobrecarga do inversor",
+                    "Para reduzir a produção de energia"
+                ],
+                answer: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function showQuestion() {
+            const gameDiv = document.getElementById("game");
+            const scoreDiv = document.getElementById("score");
+            const nextButton = document.getElementById("nextButton");
+
+            scoreDiv.textContent = `Pontuação: ${score}`;
+            nextButton.style.display = "none";
+
+            if (currentQuestion < questions.length) {
+                const q = questions[currentQuestion];
+                gameDiv.innerHTML = `
+          <div class="question">${q.question}</div>
+          ${q.options.map((option, index) => `
+            <div class="option" onclick="checkAnswer(${index})">${option}</div>
+          `).join("")}
+        `;
+            } else {
+                gameDiv.innerHTML = "<h2>Fim do Jogo!</h2><p>Você acertou " + score + " de " + questions.length + " perguntas.</p>";
+                nextButton.style.display = "none";
+            }
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll(".option");
+            options.forEach((option, index) => {
+                option.onclick = null;
+                if (index === q.answer) {
+                    option.classList.add("correct");
+                } else if (index === selected) {
+                    option.classList.add("wrong");
+                }
+            });
+
+            if (selected === q.answer) {
+                score++;
+            }
+
+            document.getElementById("nextButton").style.display = "inline-block";
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        window.onload = showQuestion;
+    </script>
+</body>
+
+</html>
